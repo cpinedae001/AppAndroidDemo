@@ -32,8 +32,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.myapplication.R;
+import com.example.myapplication.data.model.User;
 import com.example.myapplication.ui.login.LoginViewModel;
 import com.example.myapplication.ui.login.LoginViewModelFactory;
+import com.example.myapplication.utilities.PostService;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -191,5 +199,31 @@ public class LoginActivity extends AppCompatActivity {
         }else{
             return telephonyManager.getDeviceId();
         }
+    }
+
+    private void find(){
+        Retrofit retrofit = new Retrofit.Builder().baseUrl("http://localhost:8080/")
+                .addConverterFactory(GsonConverterFactory.create()).build();
+
+        PostService postService = retrofit.create(PostService.class);
+        Call<User> call = postService.findAll();
+        call.enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                try {
+                    if(response.isSuccessful()){
+                      //Toast.makeText(this, "si hay conexion", Toast.LENGTH_LONG).show();
+                        System.out.println("************* si ahy conexion");
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+            }
+        });
+
     }
 }
