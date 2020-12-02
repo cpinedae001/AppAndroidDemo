@@ -1,17 +1,36 @@
 package com.example.myapplication.data.model;
 
+import java.util.Date;
+
 public class Usuario {
+
+    private static final long serialVersionUID = 1L;
+
+    private Integer id;
     private String usuario;
-    private String contraseña;
+    private String contrasena;
     private String activo;
+    private Date fecha_creacion;
+    private Persona personaId;
 
     public Usuario() {
     }
 
-    public Usuario(String usuario, String contraseña, String activo) {
+    public Usuario(Integer id, String usuario, String contrasena, String activo, Date fecha_creacion, Persona personaId) {
+        this.id = id;
         this.usuario = usuario;
-        this.contraseña = contraseña;
+        this.contrasena = contrasena;
         this.activo = activo;
+        this.fecha_creacion = fecha_creacion;
+        this.personaId = personaId;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getUsuario() {
@@ -22,12 +41,12 @@ public class Usuario {
         this.usuario = usuario;
     }
 
-    public String getContraseña() {
-        return contraseña;
+    public String getContrasena() {
+        return contrasena;
     }
 
-    public void setContraseña(String contraseña) {
-        this.contraseña = contraseña;
+    public void setContrasena(String contrasena) {
+        this.contrasena = contrasena;
     }
 
     public String getActivo() {
@@ -38,12 +57,22 @@ public class Usuario {
         this.activo = activo;
     }
 
+    public Date getFecha_creacion() {
+        return fecha_creacion;
+    }
+
+    public void setFecha_creacion(Date fecha_creacion) {
+        this.fecha_creacion = fecha_creacion;
+    }
+
     @Override
     public String toString() {
         return "Usuario{" +
-                "usuario='" + usuario + '\'' +
-                ", contraseña='" + contraseña + '\'' +
+                "id=" + id +
+                ", usuario='" + usuario + '\'' +
+                ", contrasena='" + contrasena + '\'' +
                 ", activo='" + activo + '\'' +
+                ", fecha_creacion=" + fecha_creacion +
                 '}';
     }
 }

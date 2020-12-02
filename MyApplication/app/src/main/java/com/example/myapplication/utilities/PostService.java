@@ -1,5 +1,6 @@
 package com.example.myapplication.utilities;
 
+import com.example.myapplication.data.model.CatCategoria;
 import com.example.myapplication.data.model.User;
 
 import retrofit2.Call;
@@ -13,4 +14,7 @@ public interface PostService {
 
     @GET("/usuario")
     public Call<User> findAll();
+
+    @GET("/api/Cat_Categoria")
+    public Call<CatCategoria> findAllCategorias();
 }

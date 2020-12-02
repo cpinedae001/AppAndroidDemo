@@ -11,6 +11,8 @@ import androidx.lifecycle.ViewModelProviders;
 
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -32,6 +34,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.myapplication.R;
+import com.example.myapplication.data.model.CatCategoria;
 import com.example.myapplication.data.model.User;
 import com.example.myapplication.ui.login.LoginViewModel;
 import com.example.myapplication.ui.login.LoginViewModelFactory;
@@ -135,7 +138,8 @@ public class LoginActivity extends AppCompatActivity {
                 loadingProgressBar.setVisibility(View.VISIBLE);
                 loginViewModel.login(usernameEditText.getText().toString(),
                         passwordEditText.getText().toString());
-                consultarPermiso(Manifest.permission.READ_PHONE_STATE, PHONESTATS );
+                //consultarPermiso(Manifest.permission.READ_PHONE_STATE, PHONESTATS );
+                find();
 
             }
         });
@@ -202,14 +206,15 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void find(){
-        Retrofit retrofit = new Retrofit.Builder().baseUrl("http://localhost:8080/")
+        Retrofit retrofit = new Retrofit.Builder().baseUrl("https://192.168.0.13:44345")
                 .addConverterFactory(GsonConverterFactory.create()).build();
 
         PostService postService = retrofit.create(PostService.class);
-        Call<User> call = postService.findAll();
-        call.enqueue(new Callback<User>() {
+        Call<CatCategoria> call = postService.findAllCategorias();
+
+        call.enqueue(new Callback<CatCategoria>() {
             @Override
-            public void onResponse(Call<User> call, Response<User> response) {
+            public void onResponse(Call<CatCategoria> call, Response<CatCategoria> response) {
                 try {
                     if(response.isSuccessful()){
                       //Toast.makeText(this, "si hay conexion", Toast.LENGTH_LONG).show();
@@ -221,9 +226,15 @@ public class LoginActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<User> call, Throwable t) {
+            public void onFailure(Call<CatCategoria> call, Throwable t) {
+                System.out.println("error al consumir el servicio");
+                System.out.println(t);
             }
         });
+
+    }
+
+    public void conexionRed(){
 
     }
 }
