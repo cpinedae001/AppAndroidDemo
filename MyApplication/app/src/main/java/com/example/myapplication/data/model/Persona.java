@@ -40,6 +40,22 @@ public class Persona {
         this.fechaCreacion = fechaCreacion;
         this.nit = nit;
     }
+    public Persona(Long id, String nit){
+        this.id = id;
+        this.primerNombre = "";
+        this.segundoNombre = "";
+        this.primerApellido = "";
+        this.segundoApellido = "";
+        this.nombreEmpresa = "";
+        this.direccion1 = "";
+        this.direccion2 = "";
+        this.telefono1 = "";
+        this.telefono2 = "";
+        this.email = "";
+        this.esNatural = "";
+        this.fechaCreacion = null;
+        this.nit = nit;
+    }
 
     public Persona(Long id) {
         this.id = id;

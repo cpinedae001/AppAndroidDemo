@@ -10,6 +10,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -33,13 +34,19 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.myapplication.MainActivity;
 import com.example.myapplication.R;
 import com.example.myapplication.data.model.CatCategoria;
+import com.example.myapplication.data.model.CatTipoUsuario;
+import com.example.myapplication.data.model.Persona;
 import com.example.myapplication.data.model.User;
+import com.example.myapplication.data.model.Usuario;
 import com.example.myapplication.ui.login.LoginViewModel;
 import com.example.myapplication.ui.login.LoginViewModelFactory;
 import com.example.myapplication.utilities.Adaptador;
 import com.example.myapplication.utilities.PostService;
+
+import java.util.Date;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -50,8 +57,10 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class LoginActivity extends AppCompatActivity implements Callback<CatCategoria> {
 
     private LoginViewModel loginViewModel;
-    private String userAdmin = "admin";
-    private String contrasena ="admin";
+
+    private CatTipoUsuario catTipoUsuario = new CatTipoUsuario(1,"administrador","1",new Date());
+    private Persona persona = new Persona(1L,"12222");
+    private Usuario usuario = new Usuario(1, "admin","admin", "1", new Date(), catTipoUsuario, persona);
     String imei = "";
     static final Integer PHONESTATS = 0x1;
     @Override
@@ -140,7 +149,19 @@ public class LoginActivity extends AppCompatActivity implements Callback<CatCate
                 loginViewModel.login(usernameEditText.getText().toString(),
                         passwordEditText.getText().toString());
                 //consultarPermiso(Manifest.permission.READ_PHONE_STATE, PHONESTATS );
-                find();
+                usuario.setUsuario(usernameEditText.getText().toString());
+                usuario.setContrasena(passwordEditText.getText().toString());
+                find(usuario);
+
+                try {
+
+                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                    startActivity(intent);
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+
+                //finish();
 
             }
         });
@@ -207,13 +228,20 @@ public class LoginActivity extends AppCompatActivity implements Callback<CatCate
         return null;
     }
 
-    private void find(){
+    private void find(Usuario usuario){
 
-        Call<CatCategoria> call = Adaptador.getServicios().findOne("2");
-        call.enqueue(this);
+
         //Call<CatCategoria> call2 = Adaptador.getServicios().findOne("2");
-        
+
+        if(usuario.getUsuario().contains("admin") && usuario.getContrasena().contains("admin1234")){
+
+        }else {
+            Call<CatCategoria> call = Adaptador.getServicios().findOne("2");
+            call.enqueue(this);
+        }
+
     }
+
 
     @Override
     public void onResponse(Call<CatCategoria> call, Response<CatCategoria> response) {
@@ -229,5 +257,12 @@ public class LoginActivity extends AppCompatActivity implements Callback<CatCate
     @Override
     public void onFailure(Call<CatCategoria> call, Throwable t) {
         Log.d("onResponse diseases", "no  hay conexion" + t.toString());
+    }
+
+
+    private boolean validarUsuario(String usuario, String contrasena){
+
+
+        return false;
     }
 }
