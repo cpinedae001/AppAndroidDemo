@@ -15,6 +15,9 @@ public interface PostService {
     @GET("/usuario")
     public Call<User> findAll();
 
-    @GET("/api/Cat_Categoria")
-    public Call<CatCategoria> findAllCategorias();
+    @GET("api/Cat_Categoria")
+    public Call<String> findAllCategorias();
+
+    @GET("api/Cat_Categoria/{id}")
+    public Call<CatCategoria> findOne(@Path("id") String id);
 }

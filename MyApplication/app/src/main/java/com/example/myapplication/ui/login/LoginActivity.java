@@ -38,6 +38,7 @@ import com.example.myapplication.data.model.CatCategoria;
 import com.example.myapplication.data.model.User;
 import com.example.myapplication.ui.login.LoginViewModel;
 import com.example.myapplication.ui.login.LoginViewModelFactory;
+import com.example.myapplication.utilities.Adaptador;
 import com.example.myapplication.utilities.PostService;
 
 import retrofit2.Call;
@@ -46,7 +47,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity implements Callback<CatCategoria> {
 
     private LoginViewModel loginViewModel;
     private String userAdmin = "admin";
@@ -199,42 +200,34 @@ public class LoginActivity extends AppCompatActivity {
     private String obtenerIMEI(){
         final TelephonyManager telephonyManager = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
-            return telephonyManager.getImei();
+            //return telephonyManager.getImei();
         }else{
-            return telephonyManager.getDeviceId();
+            //return telephonyManager.getDeviceId();
         }
+        return null;
     }
 
     private void find(){
-        Retrofit retrofit = new Retrofit.Builder().baseUrl("https://192.168.0.13:44345")
-                .addConverterFactory(GsonConverterFactory.create()).build();
 
-        PostService postService = retrofit.create(PostService.class);
-        Call<CatCategoria> call = postService.findAllCategorias();
-
-        call.enqueue(new Callback<CatCategoria>() {
-            @Override
-            public void onResponse(Call<CatCategoria> call, Response<CatCategoria> response) {
-                try {
-                    if(response.isSuccessful()){
-                      //Toast.makeText(this, "si hay conexion", Toast.LENGTH_LONG).show();
-                        System.out.println("************* si ahy conexion");
-                    }
-                }catch (Exception e){
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<CatCategoria> call, Throwable t) {
-                System.out.println("error al consumir el servicio");
-                System.out.println(t);
-            }
-        });
-
+        Call<CatCategoria> call = Adaptador.getServicios().findOne("2");
+        call.enqueue(this);
+        //Call<CatCategoria> call2 = Adaptador.getServicios().findOne("2");
+        
     }
 
-    public void conexionRed(){
+    @Override
+    public void onResponse(Call<CatCategoria> call, Response<CatCategoria> response) {
+        if(response.isSuccessful()){
+            Log.d("onResponse diseases", "exito si hay conexion");
+            CatCategoria respuesta = response.body();
+            Log.d("REspuesta: ", respuesta.toString());
+        }else {
+            Log.d("onResponse diseases", "error, pero hay conexion");
+        }
+    }
 
+    @Override
+    public void onFailure(Call<CatCategoria> call, Throwable t) {
+        Log.d("onResponse diseases", "no  hay conexion" + t.toString());
     }
 }

@@ -59,4 +59,15 @@ public class CatCategoria {
     public void setActivo(String activo) {
         this.activo = activo;
     }
+
+    @Override
+    public String toString() {
+        return "CatCategoria{" +
+                "id=" + id +
+                ", nombre='" + nombre + '\'' +
+                ", descripcion='" + descripcion + '\'' +
+                ", fechaCreacion=" + fechaCreacion +
+                ", activo='" + activo + '\'' +
+                '}';
+    }
 }
